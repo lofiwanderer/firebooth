@@ -15,6 +15,9 @@ if 'momentum_line' not in st.session_state:
     st.session_state.momentum_line = [0]
 if 'rounds' not in st.session_state:
     st.session_state.rounds = []
+
+if "roundsc" not in st.session_state:
+    st.session_state.roundsc = []
 if 'danger_zones' not in st.session_state:
     st.session_state.danger_zones = []
 
