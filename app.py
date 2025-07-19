@@ -18,6 +18,14 @@ if 'rounds' not in st.session_state:
 if 'danger_zones' not in st.session_state:
     st.session_state.danger_zones = []
 
+
+with st.sidebar:
+    st.header("⚙️ QUANTUM PARAMETERS")
+    WINDOW_SIZE = st.slider("MSI Window Size", 5, 100, 20)
+    PINK_THRESHOLD = st.number_input("Pink Threshold", value=10.0)
+    st.header("📊 PANEL TOGGLES")
+    FAST_ENTRY_MODE = st.checkbox("⚡ Fast Entry Mode", value=False)
+
 # ===== CORE ENGINE ===== #
 def score_round(multiplier):
     """Raw precision scoring without rounding"""
@@ -97,6 +105,41 @@ with st.container():
         if st.button("🔄 FULL RESET", type="secondary"):
             st.session_state.clear()
             st.rerun()
+
+def fast_entry_mode_ui(pink_threshold):
+    st.markdown("### ⚡ FAST ENTRY MODE")
+    st.markdown("Quick enter rounds for rapid decision making")
+    
+    cols = st.columns(3)
+    with cols[0]:
+        if st.button("➕ Blue (1.5x)", use_container_width=True):
+            st.session_state.roundsc.append({
+                "timestamp": datetime.now(),
+                "multiplier": 1.5,
+                "score": -1
+            })
+            st.rerun()
+    
+    with cols[1]:
+        if st.button("➕ Purple (2x)", use_container_width=True):
+            st.session_state.roundsc.append({
+                "timestamp": datetime.now(),
+                "multiplier": 2.0,
+                "score": 1
+            })
+            st.rerun()
+    
+    with cols[2]:
+        if st.button(f"➕ Pink ({pink_threshold}x)", use_container_width=True):
+            st.session_state.roundsc.append({
+                "timestamp": datetime.now(),
+                "multiplier": pink_threshold,
+                "score": 2
+            })
+            st.rerun()
+# Display fast entry mode if enabled
+if FAST_ENTRY_MODE:
+    fast_entry_mode_ui(PINK_THRESHOLD)
 
 # Main display
 st.pyplot(create_battle_chart())
