@@ -118,29 +118,39 @@ def fast_entry_mode_ui(pink_threshold):
     cols = st.columns(3)
     with cols[0]:
         if st.button("➕ Blue (1.5x)", use_container_width=True):
-            st.session_state.roundsc.append({
+            st.session_state.rounds.append({
                 "timestamp": datetime.now(),
                 "multiplier": 1.5,
                 "score": -1
             })
+            st.session_state.rounds.append(mult)
+            st.session_state.momentum_line.append(
+                st.session_state.momentum_line[-1] + score_round(mult))
             st.rerun()
+            
     
     with cols[1]:
         if st.button("➕ Purple (2x)", use_container_width=True):
-            st.session_state.roundsc.append({
+            st.session_state.rounds.append({
                 "timestamp": datetime.now(),
                 "multiplier": 2.0,
                 "score": 1
             })
+            st.session_state.rounds.append(mult)
+            st.session_state.momentum_line.append(
+                st.session_state.momentum_line[-1] + score_round(mult))
             st.rerun()
     
     with cols[2]:
         if st.button(f"➕ Pink ({pink_threshold}x)", use_container_width=True):
-            st.session_state.roundsc.append({
+            st.session_state.rounds.append({
                 "timestamp": datetime.now(),
                 "multiplier": pink_threshold,
                 "score": 2
             })
+            st.session_state.rounds.append(mult)
+            st.session_state.momentum_line.append(
+                st.session_state.momentum_line[-1] + score_round(mult))
             st.rerun()
 # Display fast entry mode if enabled
 if FAST_ENTRY_MODE:
